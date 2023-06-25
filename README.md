@@ -185,8 +185,6 @@ It has one boolean parameter 'download'. It is false by default. If you want to 
 
 # 
 
-Now we have understood how we are going to use them and their structure.
-
 Now we have understood how we are going to use them and their structure. Here I am Attaching the actual code.
 
 #### Go and check bitbucket-pipelines.yml file for full code.
