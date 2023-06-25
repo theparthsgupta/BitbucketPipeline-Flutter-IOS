@@ -1,0 +1,68 @@
+image: cirrusci/flutter:latest
+pipelines:
+  custom:
+    master:
+      - step:
+          runs-on:
+            - self.hosted
+            - macos
+          name: Flutter Build ipa file
+          script:
+            - flutter build ipa --export-options-plist=$IOS_EXPORTOPTION_PLIST_FILE --no-sound-null-safety
+          artifacts:
+            - build/ios/**
+      - step:
+          name: Upload iOS App
+          runs-on:
+            - self.hosted
+            - macos
+          trigger: manual
+          deployment: Production
+          script:
+            - xcrun altool --upload-app --type ios -f build/ios/ipa/*.ipa --apiKey $IOS_API_KEY_APPSTORE --apiIssuer $IOS_ISSUER_ID_APPSTORE
+
+    development:
+      - stage:
+          name: Flutter Cleaning
+          steps:
+            - step:
+                runs-on:
+                  - self.hosted
+                  - macos
+                name: Flutter Build Clean
+                script:
+                  - flutter clean
+            - step:
+                runs-on:
+                  - self.hosted
+                  - macos
+                name: Flutter Pub Get
+                script:
+                  - flutter pub get
+      - stage:
+          name: Flutter Build iOS
+          steps:
+            - step:
+                runs-on:
+                  - self.hosted
+                  - macos
+                name: Flutter Build iOS
+                script:
+                  - flutter build ios --release --no-sound-null-safety
+            - step:
+                runs-on:
+                  - self.hosted
+                  - macos
+                name: Flutter Build ipa file
+                script:
+                  - flutter build ipa --export-options-plist=$IOS_EXPORTOPTION_PLIST_FILE --no-sound-null-safety
+                artifacts:
+                  - build/ios/**
+            - step:
+                name: Validate iOS App
+                runs-on:
+                  - self.hosted
+                  - macos
+                deployment: Staging
+                script:
+                  - xcrun altool --validate-app --type ios -f build/ios/ipa/*.ipa --apiKey $IOS_API_KEY_APPSTORE --apiIssuer $IOS_ISSUER_ID_APPSTORE
