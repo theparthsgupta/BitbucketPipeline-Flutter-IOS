@@ -29,7 +29,7 @@ It is a file with bunch of code which can includes regular stuff of the manual p
 
 #### Sample Code
 ```bash
-image: cirrusci/flutter:latest
+image: ghcr.io/cirruslabs/flutter:latest
 ```
 
 ### 2 custom
