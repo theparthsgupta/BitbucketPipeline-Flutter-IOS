@@ -1,4 +1,4 @@
-image: cirrusci/flutter:latest
+image: ghcr.io/cirruslabs/flutter:latest
 pipelines:
   custom:
     master:
